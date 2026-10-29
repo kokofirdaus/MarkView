@@ -1,0 +1,318 @@
+<Window x:Class="MarkView.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:MarkView.Views"
+        xmlns:converters="clr-namespace:MarkView.Converters"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}"
+        Height="{Binding WindowHeight, Mode=TwoWay}"
+        Width="{Binding WindowWidth, Mode=TwoWay}"
+        Left="{Binding WindowLeft, Mode=TwoWay}"
+        Top="{Binding WindowTop, Mode=TwoWay}"
+        MinWidth="700" MinHeight="450"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Foreground="{DynamicResource TextPrimaryBrush}"
+        AllowDrop="True"
+        Drop="Window_Drop"
+        DragOver="Window_DragOver"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InvBoolToVis"/>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewFileCommand}"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenFileCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveFileCommand}"/>
+        <KeyBinding Key="S" Modifiers="Ctrl+Shift" Command="{Binding SaveAsFileCommand}"/>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding PrintCommand}"/>
+        <KeyBinding Key="D" Modifiers="Ctrl" Command="{Binding ToggleThemeCommand}"/>
+        <KeyBinding Key="F" Modifiers="Ctrl" Command="{Binding ToggleFindBarCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Alt" Command="{Binding ToggleWordWrapCommand}"/>
+        <KeyBinding Key="D1" Modifiers="Ctrl" Command="{Binding SetViewModeCommand}" CommandParameter="EditorOnly"/>
+        <KeyBinding Key="D2" Modifiers="Ctrl" Command="{Binding SetViewModeCommand}" CommandParameter="Split"/>
+        <KeyBinding Key="D3" Modifiers="Ctrl" Command="{Binding SetViewModeCommand}" CommandParameter="PreviewOnly"/>
+        <KeyBinding Key="OemPlus" Modifiers="Ctrl" Command="{Binding ZoomInCommand}"/>
+        <KeyBinding Key="OemMinus" Modifiers="Ctrl" Command="{Binding ZoomOutCommand}"/>
+        <KeyBinding Key="D0" Modifiers="Ctrl" Command="{Binding ResetZoomCommand}"/>
+    </Window.InputBindings>
+
+    <DockPanel LastChildFill="True">
+        <!-- 1. MenuBar -->
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource ToolbarBackgroundBrush}" 
+              Foreground="{DynamicResource TextPrimaryBrush}"
+              TextElement.Foreground="{DynamicResource TextPrimaryBrush}">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Baru" InputGestureText="Ctrl+N" Command="{Binding NewFileCommand}"/>
+                <MenuItem Header="_Buka..." InputGestureText="Ctrl+O" Command="{Binding OpenFileCommand}"/>
+                <MenuItem Header="Buka _Terakhir" ItemsSource="{Binding RecentFiles}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding FileName}"/>
+                            <Setter Property="ToolTip" Value="{Binding FilePath}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.OpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=Menu}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Simpan" InputGestureText="Ctrl+S" Command="{Binding SaveFileCommand}"/>
+                <MenuItem Header="Simpan _Sebagai..." InputGestureText="Ctrl+Shift+S" Command="{Binding SaveAsFileCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Cetak / Ekspor PDF..." InputGestureText="Ctrl+P" Command="{Binding PrintCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Keluar" InputGestureText="Alt+F4" Click="MenuItemExit_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" InputGestureText="Ctrl+Z" Command="ApplicationCommands.Undo"/>
+                <MenuItem Header="_Redo" InputGestureText="Ctrl+Y" Command="ApplicationCommands.Redo"/>
+                <Separator/>
+                <MenuItem Header="_Cut" InputGestureText="Ctrl+X" Command="ApplicationCommands.Cut"/>
+                <MenuItem Header="_Copy" InputGestureText="Ctrl+C" Command="ApplicationCommands.Copy"/>
+                <MenuItem Header="_Paste" InputGestureText="Ctrl+V" Command="ApplicationCommands.Paste"/>
+                <Separator/>
+                <MenuItem Header="_Cari..." InputGestureText="Ctrl+F" Command="{Binding ToggleFindBarCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Tampilan">
+                <MenuItem Header="Mode _Editor Saja (Tutup Preview)" InputGestureText="Ctrl+1" Command="{Binding SetViewModeCommand}" CommandParameter="EditorOnly"/>
+                <MenuItem Header="Mode _Split (50/50)" InputGestureText="Ctrl+2" Command="{Binding SetViewModeCommand}" CommandParameter="Split"/>
+                <MenuItem Header="Mode _Preview Saja (Tutup Editor)" InputGestureText="Ctrl+3" Command="{Binding SetViewModeCommand}" CommandParameter="PreviewOnly"/>
+                <Separator/>
+                <MenuItem Header="_Bungkus Baris (Word Wrap)" InputGestureText="Alt+Z" IsCheckable="True" IsChecked="{Binding WordWrap}"/>
+                <MenuItem Header="Tampilkan _Nomor Baris" IsCheckable="True" IsChecked="{Binding ShowLineNumbers}"/>
+                <Separator/>
+                <MenuItem Header="_Perbesar Font" InputGestureText="Ctrl++" Command="{Binding ZoomInCommand}"/>
+                <MenuItem Header="_Perkecil Font" InputGestureText="Ctrl+-" Command="{Binding ZoomOutCommand}"/>
+                <MenuItem Header="_Reset Ukuran Font" InputGestureText="Ctrl+0" Command="{Binding ResetZoomCommand}"/>
+                <Separator/>
+                <MenuItem Header="Mode _Gelap (Dark Mode)" InputGestureText="Ctrl+D" Command="{Binding ToggleThemeCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="_Bantuan">
+                <MenuItem Header="_Tentang MarkView" Command="{Binding ShowAboutCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- 2. ToolBar -->
+        <ToolBar DockPanel.Dock="Top" Background="{DynamicResource ToolbarBackgroundBrush}" 
+                 ToolBarTray.IsLocked="True" Height="36"
+                 Foreground="{DynamicResource TextPrimaryBrush}"
+                 TextElement.Foreground="{DynamicResource TextPrimaryBrush}">
+            <ToolBar.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Padding" Value="7,3"/>
+                    <Setter Property="Margin" Value="2,1"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="bd" Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        CornerRadius="4" Padding="{TemplateBinding Padding}"
+                                        TextElement.Foreground="{TemplateBinding Foreground}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="bd" Property="Background" Value="{DynamicResource ButtonHoverBrush}"/>
+                                        <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource DividerBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="bd" Property="Background" Value="{DynamicResource ButtonPressedBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+                                        <Setter TargetName="bd" Property="Opacity" Value="0.55"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="Separator">
+                    <Setter Property="Background" Value="{DynamicResource DividerBrush}"/>
+                    <Setter Property="Margin" Value="5,4"/>
+                    <Setter Property="Width" Value="1"/>
+                </Style>
+            </ToolBar.Resources>
+
+            <Button Command="{Binding OpenFileCommand}" ToolTip="Buka File Markdown (Ctrl+O)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📂" Margin="0,0,4,0"/>
+                    <TextBlock Text="Buka"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveFileCommand}" ToolTip="Simpan File (Ctrl+S)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="💾" Margin="0,0,4,0"/>
+                    <TextBlock Text="Simpan"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveAsFileCommand}" ToolTip="Simpan Sebagai... (Ctrl+Shift+S)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="💾+" Margin="0,0,4,0"/>
+                    <TextBlock Text="Simpan Sebagai"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding PrintCommand}" ToolTip="Cetak atau Ekspor ke PDF (Ctrl+P)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🖨️" Margin="0,0,4,0"/>
+                    <TextBlock Text="Cetak/PDF"/>
+                </StackPanel>
+            </Button>
+
+            <Separator Margin="6,2"/>
+
+            <Button Command="{Binding SetViewModeCommand}" CommandParameter="EditorOnly" ToolTip="Mode Editor Saja - Tutup Preview (Ctrl+1)">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditorOnly}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="✏️" Margin="0,0,4,0"/>
+                    <TextBlock Text="Editor Saja"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SetViewModeCommand}" CommandParameter="Split" ToolTip="Mode Split 50/50 (Ctrl+2)">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSplit}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="⬜" Margin="0,0,4,0"/>
+                    <TextBlock Text="Split"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SetViewModeCommand}" CommandParameter="PreviewOnly" ToolTip="Mode Preview Saja - Tutup Editor (Ctrl+3)">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPreviewOnly}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="👁" Margin="0,0,4,0"/>
+                    <TextBlock Text="Preview Saja"/>
+                </StackPanel>
+            </Button>
+
+            <Separator Margin="6,2"/>
+
+            <Button Command="{Binding ToggleThemeCommand}" ToolTip="Ganti Tema Terang/Gelap (Ctrl+D)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🌓" Margin="0,0,4,0"/>
+                    <TextBlock Text="Tema"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding ToggleFindBarCommand}" ToolTip="Cari Teks di Editor (Ctrl+F)">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🔍" Margin="0,0,4,0"/>
+                    <TextBlock Text="Cari"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+
+        <!-- 3. StatusBar -->
+        <StatusBar DockPanel.Dock="Bottom" Background="{DynamicResource StatusBarBackgroundBrush}" 
+                   Foreground="White" TextElement.Foreground="White" Padding="8,1">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📄 "/>
+                    <TextBlock Text="{Binding CurrentFileName}" FontWeight="SemiBold"/>
+                </StackPanel>
+            </StatusBarItem>
+            <Separator Margin="8,2"/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusCursorPositionText}"/>
+            </StatusBarItem>
+            <Separator Margin="8,2"/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusWordCountText}"/>
+            </StatusBarItem>
+            <Separator Margin="8,2"/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding FileEncoding}"/>
+            </StatusBarItem>
+            <Separator Margin="8,2"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="{Binding CurrentSaveStatus}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ModifiedStatusBrush}"/>
+                                    <Setter Property="Text" Value="✏️ Diubah"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource SaveStatusBrush}"/>
+                                    <Setter Property="Text" Value="✅ Tersimpan"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- 4. Main Content Area -->
+        <Grid>
+            <!-- State A: Welcome View (when HasFile == false) -->
+            <views:WelcomeView Visibility="{Binding HasFile, Converter={StaticResource InvBoolToVis}}"/>
+
+            <!-- State B: Document View (when HasFile == true) -->
+            <Grid Visibility="{Binding HasFile, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding EditorColumnWidth, Mode=TwoWay}"/>
+                    <ColumnDefinition Width="{Binding SplitterColumnWidth, Mode=OneWay}"/>
+                    <ColumnDefinition Width="{Binding PreviewColumnWidth, Mode=TwoWay}"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Column: AvalonEdit Editor (Completely closes when PreviewOnly) -->
+                <views:EditorPanel x:Name="EditorPanelInstance" Grid.Column="0" 
+                                   Visibility="{Binding EditorVisibility}"/>
+
+                <!-- Middle: Draggable GridSplitter (Completely closes when not Split) -->
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"
+                              Background="{DynamicResource DividerBrush}"
+                              Visibility="{Binding SplitterVisibility}"/>
+
+                <!-- Right Column: MdXaml Preview (Completely closes when EditorOnly) -->
+                <views:PreviewPanel Grid.Column="2" 
+                                    Visibility="{Binding PreviewVisibility}"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

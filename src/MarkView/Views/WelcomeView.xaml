@@ -1,0 +1,92 @@
+<UserControl x:Class="MarkView.Views.WelcomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid Background="{DynamicResource AppBackgroundBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30" MaxWidth="500">
+                <!-- Icon -->
+                <TextBlock Text="📄" FontSize="56" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                
+                <!-- Title -->
+                <TextBlock Text="MarkView" FontSize="32" FontWeight="Bold" 
+                           HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                
+                <!-- Subtitles -->
+                <TextBlock Text="Markdown Viewer &amp; Editor untuk Windows" FontSize="14" 
+                           HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,2"/>
+                <TextBlock Text="Cepat · Ringan · Native · Tanpa WebView" FontSize="12" 
+                           HorizontalAlignment="Center" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,25"/>
+
+                <!-- Action Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                    <Button Content="📂 Buka File (.md)" 
+                            Command="{Binding OpenFileCommand}"
+                            Padding="16,8" Margin="0,0,10,0" FontSize="13" FontWeight="SemiBold"
+                            Background="{DynamicResource AccentBrush}" Foreground="White"
+                            BorderThickness="0" Cursor="Hand"/>
+                    <Button Content="📄 File Baru" 
+                            Command="{Binding NewFileCommand}"
+                            Padding="16,8" FontSize="13"
+                            Background="{DynamicResource HeaderBackgroundBrush}" Foreground="{DynamicResource TextPrimaryBrush}"
+                            BorderBrush="{DynamicResource DividerBrush}" BorderThickness="1" Cursor="Hand"/>
+                </StackPanel>
+
+                <!-- Drag & Drop Hint -->
+                <TextBlock Text="atau seret file .md langsung ke jendela ini" FontSize="12" 
+                           HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,30"/>
+
+                <!-- Separator -->
+                <Separator Background="{DynamicResource DividerBrush}" Margin="0,0,0,20"/>
+
+                <!-- Recent Files Section -->
+                <TextBlock Text="File Terakhir Dibuka:" FontSize="13" FontWeight="SemiBold" 
+                           Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+
+                <ItemsControl ItemsSource="{Binding RecentFiles}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.OpenRecentFileCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding FilePath}"
+                                    Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                    HorizontalContentAlignment="Left" Padding="8,6" Margin="0,2">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" TargetName="border" Value="{DynamicResource HeaderBackgroundBrush}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="📄 " FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="{Binding FilePath}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

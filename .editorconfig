@@ -1,0 +1,22 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{xaml,xml}]
+indent_size = 4
+
+[*.{json,yml,yaml,md}]
+indent_size = 2
+end_of_line = lf
+
+[*.cs]
+csharp_new_line_before_open_brace = all
+csharp_preferred_modifier_order = public,protected,internal,private,static,virtual,sealed,override,abstract,readonly,volatile,async:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion

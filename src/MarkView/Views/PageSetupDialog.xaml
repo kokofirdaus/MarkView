@@ -1,0 +1,71 @@
+<Window x:Class="MarkView.Views.PageSetupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Pengaturan Halaman &amp; Cetak / Ekspor PDF"
+        Height="460" Width="480"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Foreground="{DynamicResource TextPrimaryBrush}">
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="📄 Cetak &amp; Ekspor Dokumen ke PDF" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+            <TextBlock Text="Sesuaikan tata letak halaman sebelum mencetak atau menyimpan ke PDF." FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Configuration Body -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <!-- 1. Page Size -->
+            <TextBlock Text="Ukuran Kertas:" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,4"/>
+            <ComboBox x:Name="CmbPageSize" Margin="0,0,0,12" Padding="8,4" SelectedIndex="0" SelectionChanged="OnConfigChanged">
+                <ComboBoxItem Content="A4 (210 × 297 mm) — Standar"/>
+                <ComboBoxItem Content="Letter (8.5 × 11 in)"/>
+                <ComboBoxItem Content="Legal (8.5 × 14 in)"/>
+            </ComboBox>
+
+            <!-- 2. Orientation -->
+            <TextBlock Text="Orientasi Halaman:" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,4"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <RadioButton x:Name="RbPortrait" Content="Portrait (Tegak)" IsChecked="True" Margin="0,0,20,0" Checked="OnConfigChanged"/>
+                <RadioButton x:Name="RbLandscape" Content="Landscape (Mendatar)" Checked="OnConfigChanged"/>
+            </StackPanel>
+
+            <!-- 3. Margin -->
+            <TextBlock Text="Batas Tepi (Margin):" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,4"/>
+            <ComboBox x:Name="CmbMargin" Margin="0,0,0,12" Padding="8,4" SelectedIndex="0" SelectionChanged="OnConfigChanged">
+                <ComboBoxItem Content="Normal (25.4 mm)"/>
+                <ComboBoxItem Content="Sempit / Narrow (12.7 mm)"/>
+                <ComboBoxItem Content="Lebar / Wide (38.1 mm)"/>
+            </ComboBox>
+
+            <!-- 4. Additional Options -->
+            <TextBlock Text="Opsi Tambahan:" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,4"/>
+            <CheckBox x:Name="ChkCleanTheme" Content="Gunakan tema putih bersih (Hemat tinta cetak &amp; PDF)" IsChecked="True" Margin="0,0,0,6"/>
+            <CheckBox x:Name="ChkHeader" Content="Sertakan nama dokumen di bagian atas halaman" IsChecked="True" Margin="0,0,0,12"/>
+
+            <!-- Summary Box -->
+            <Border Background="{DynamicResource HeaderBackgroundBrush}" BorderBrush="{DynamicResource DividerBrush}" BorderThickness="1" CornerRadius="4" Padding="10,8">
+                <TextBlock x:Name="TxtSummary" Text="Ringkasan: A4 · Portrait · Margin Normal" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="📄 Simpan PDF..." Click="BtnExportPdf_Click" 
+                    Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" FontSize="12"/>
+            <Button Content="🖨️ Cetak / Print..." Click="BtnPrint_Click" 
+                    Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,8,0" FontSize="12"/>
+            <Button Content="Batal" Click="BtnCancel_Click" 
+                    Style="{StaticResource SecondaryButtonStyle}" FontSize="12"/>
+        </StackPanel>
+    </Grid>
+</Window>

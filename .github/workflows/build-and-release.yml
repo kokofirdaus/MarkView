@@ -1,0 +1,91 @@
+name: Build and Release MarkView
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Build Native Executables
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        target:
+          - rid: win-x64
+            name: MarkView-win-x64.exe
+          - rid: win-arm64
+            name: MarkView-win-arm64.exe
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore MarkView.sln
+
+      - name: Publish Single-File Executable (${{ matrix.target.rid }})
+        run: >
+          dotnet publish src/MarkView/MarkView.csproj
+          -c Release
+          -r ${{ matrix.target.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -o ./artifacts/${{ matrix.target.rid }}
+
+      - name: Rename and Stage Binary
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path ./staged -Force
+          Copy-Item "./artifacts/${{ matrix.target.rid }}/MarkView.exe" "./staged/${{ matrix.target.name }}"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target.rid }}
+          path: ./staged/${{ matrix.target.name }}
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download win-x64 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: win-x64
+          path: ./release-assets
+
+      - name: Download win-arm64 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: win-arm64
+          path: ./release-assets
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./release-assets/MarkView-win-x64.exe
+            ./release-assets/MarkView-win-arm64.exe
+            ./installer/install.ps1
+            ./installer/setup.iss
+          draft: false
+          prerelease: false
+          generate_release_notes: true
