@@ -12,6 +12,7 @@
         Left="{Binding WindowLeft, Mode=TwoWay}"
         Top="{Binding WindowTop, Mode=TwoWay}"
         MinWidth="700" MinHeight="450"
+        Icon="pack://application:,,,/Assets/icon.ico"
         Background="{DynamicResource AppBackgroundBrush}"
         Foreground="{DynamicResource TextPrimaryBrush}"
         AllowDrop="True"

@@ -1,12 +1,20 @@
-# MarkView 📄
+<p align="center">
+  <img src="logo.png" alt="MarkView Logo" width="128" height="128" />
+</p>
 
-> **Modern, Ultra-Lightweight Native Windows Markdown Viewer & Editor**  
-> Didesain khusus untuk membuka, membaca, mengedit, dan mengekspor dokumen Markdown (`.md`) dengan performa instan tanpa browser engine.
+<h1 align="center">MarkView</h1>
 
-[![Build and Release](https://github.com/kokofirdaus/MarkView/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/kokofirdaus/MarkView/actions/workflows/build-and-release.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20(x64%20%26%20ARM64)-blue)](https://github.com/kokofirdaus/MarkView)
-[![Framework](https://img.shields.io/badge/Framework-.NET%208%20WPF%20(Zero%20WebView)-512BD4)](https://dotnet.microsoft.com/)
+<p align="center">
+  <strong>Modern, Ultra-Lightweight Native Windows Markdown Viewer &amp; Editor</strong><br>
+  Didesain khusus untuk membuka, membaca, mengedit, dan mengekspor dokumen Markdown (<code>.md</code>) dengan performa instan tanpa browser engine.
+</p>
+
+<p align="center">
+  <a href="https://github.com/kokofirdaus/MarkView/actions/workflows/build-and-release.yml"><img src="https://github.com/kokofirdaus/MarkView/actions/workflows/build-and-release.yml/badge.svg" alt="Build and Release" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://github.com/kokofirdaus/MarkView"><img src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20(x64%20%26%20ARM64)-blue" alt="Platform" /></a>
+  <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/Framework-.NET%208%20WPF%20(Zero%20WebView)-512BD4" alt="Framework" /></a>
+</p>
 
 ---
 

@@ -5,6 +5,7 @@
         Height="430" Width="520"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
+        Icon="pack://application:,,,/Assets/icon.ico"
         Background="{StaticResource BgBrush}"
         Foreground="{StaticResource TextPrimaryBrush}">
     
@@ -18,8 +19,8 @@
         <!-- 1. Header -->
         <StackPanel Grid.Row="0" Margin="0,0,0,16">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="📄" FontSize="26" Margin="0,0,10,0"/>
-                <StackPanel>
+                <Image Source="pack://application:,,,/Assets/logo.png" Width="36" Height="36" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Selamat Datang di Instalasi MarkView" FontSize="18" FontWeight="Bold" Foreground="White"/>
                     <TextBlock Text="Modern, Native Windows Markdown Viewer &amp; Editor" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                 </StackPanel>

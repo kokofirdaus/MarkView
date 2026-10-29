@@ -8,8 +8,9 @@
     <Grid Background="{DynamicResource AppBackgroundBrush}">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30" MaxWidth="500">
-                <!-- Icon -->
-                <TextBlock Text="📄" FontSize="56" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <!-- App Logo -->
+                <Image Source="pack://application:,,,/Assets/logo.png" Width="96" Height="96" 
+                       HorizontalAlignment="Center" Margin="0,0,0,16"/>
                 
                 <!-- Title -->
                 <TextBlock Text="MarkView" FontSize="32" FontWeight="Bold" 
@@ -25,14 +26,12 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <Button Content="📂 Buka File (.md)" 
                             Command="{Binding OpenFileCommand}"
-                            Padding="16,8" Margin="0,0,10,0" FontSize="13" FontWeight="SemiBold"
-                            Background="{DynamicResource AccentBrush}" Foreground="White"
-                            BorderThickness="0" Cursor="Hand"/>
+                            Style="{DynamicResource PrimaryButtonStyle}"
+                            Margin="0,0,10,0" FontSize="13"/>
                     <Button Content="📄 File Baru" 
                             Command="{Binding NewFileCommand}"
-                            Padding="16,8" FontSize="13"
-                            Background="{DynamicResource HeaderBackgroundBrush}" Foreground="{DynamicResource TextPrimaryBrush}"
-                            BorderBrush="{DynamicResource DividerBrush}" BorderThickness="1" Cursor="Hand"/>
+                            Style="{DynamicResource SecondaryButtonStyle}"
+                            FontSize="13"/>
                 </StackPanel>
 
                 <!-- Drag & Drop Hint -->
