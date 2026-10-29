@@ -1,8 +1,12 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarkView", "src\MarkView\MarkView.csproj", "{47A13B4A-7119-4F58-8C6C-9BC73A3C0895}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DF77F711-A99C-4B87-9E7F-A7A11F1059B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkView.Installer", "src\MarkView.Installer\MarkView.Installer.csproj", "{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,8 +18,15 @@ Global
 		{47A13B4A-7119-4F58-8C6C-9BC73A3C0895}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A13B4A-7119-4F58-8C6C-9BC73A3C0895}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A13B4A-7119-4F58-8C6C-9BC73A3C0895}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7DBFE7E4-8FEF-4A35-BA73-FE27B4A1851E} = {DF77F711-A99C-4B87-9E7F-A7A11F1059B2}
 	EndGlobalSection
 EndGlobal

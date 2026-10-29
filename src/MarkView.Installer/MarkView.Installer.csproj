@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>..\MarkView\Assets\icon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Authors>Koko Firdaus, Antigravity AI</Authors>
+    <Description>Modern Windows Installer for MarkView</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\dist\MarkView-win-x64.exe" Link="Payload\app_x64.bin" Condition="'$(RuntimeIdentifier)' == 'win-x64' Or '$(RuntimeIdentifier)' == ''" />
+    <EmbeddedResource Include="..\..\dist\MarkView-win-arm64.exe" Link="Payload\app_arm64.bin" Condition="'$(RuntimeIdentifier)' == 'win-arm64'" />
+  </ItemGroup>
+</Project>
